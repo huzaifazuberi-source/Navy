@@ -1,0 +1,51 @@
+{
+  "best_model": "Bagging Classifier",
+  "test_size": 1700,
+  "models": [
+    {
+      "name": "Bagging Classifier",
+      "description": "Combines many decision trees on random data samples for stable results.",
+      "cv_accuracy": 98.16,
+      "accuracy": 98.24,
+      "precision": 96.95,
+      "recall": 99.05,
+      "f1": 97.99
+    },
+    {
+      "name": "Decision Tree",
+      "description": "Splits candidates using yes/no questions on their features.",
+      "cv_accuracy": 97.18,
+      "accuracy": 98.0,
+      "precision": 97.82,
+      "recall": 97.56,
+      "f1": 97.69
+    },
+    {
+      "name": "AdaBoost Classifier",
+      "description": "Builds models in sequence, each fixing the previous one's mistakes.",
+      "cv_accuracy": 94.9,
+      "accuracy": 94.24,
+      "precision": 89.49,
+      "recall": 98.24,
+      "f1": 93.66
+    },
+    {
+      "name": "Logistic Regression",
+      "description": "A simple linear model that estimates the probability of being eligible.",
+      "cv_accuracy": 86.19,
+      "accuracy": 86.76,
+      "precision": 85.16,
+      "recall": 84.12,
+      "f1": 84.64
+    },
+    {
+      "name": "K-Nearest Neighbors",
+      "description": "Classifies a candidate by looking at the most similar past candidates.",
+      "cv_accuracy": 86.01,
+      "accuracy": 86.29,
+      "precision": 78.64,
+      "recall": 93.89,
+      "f1": 85.59
+    }
+  ]
+}

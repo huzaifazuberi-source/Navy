@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pakistan Navy Eligibility Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('home') }}" class="brand">
+                <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Pakistan Navy Logo">
+                <span class="brand-text">PAK NAVY<small>RECRUITMENT PORTAL</small></span>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{{ url_for('home') }}" class="active">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                {% if logged_in %}
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}" class="btn btn-primary">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== HERO ===== -->
+    <header class="hero">
+        <div class="container">
+            <span class="eyebrow">Serve With Honour</span>
+            <h1>Check Your <span>Pakistan Navy</span><br>Recruitment Eligibility</h1>
+            <p>An intelligent eligibility predictor that analyses your profile and
+               instantly estimates your chances of selection, along with a detailed
+               candidate report and branch recommendations.</p>
+            <a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a>
+            <a href="{{ url_for('about') }}" class="btn btn-outline">Learn More</a>
+        </div>
+    </header>
+
+    <!-- ===== FEATURES ===== -->
+    <section class="section section-white">
+        <div class="container">
+            <div class="section-head">
+                <span class="eyebrow">Why Use This Portal</span>
+                <h2>Smart Recruitment Guidance</h2>
+                <p>Everything a candidate needs to understand their standing before applying.</p>
+            </div>
+            <div class="grid grid-3">
+
+                <div class="card feature">
+                    <div class="icon">
+                        <!-- shield icon -->
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/>
+                        </svg>
+                    </div>
+                    <h3>Instant Eligibility</h3>
+                    <p>Get an immediate Eligible / Not Eligible result based on your full profile.</p>
+                </div>
+
+                <div class="card feature">
+                    <div class="icon">
+                        <!-- chart icon -->
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>
+                        </svg>
+                    </div>
+                    <h3>Detailed Report</h3>
+                    <p>See eligibility and confidence percentages with clear progress bars.</p>
+                </div>
+
+                <div class="card feature">
+                    <div class="icon">
+                        <!-- compass icon -->
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/>
+                        </svg>
+                    </div>
+                    <h3>Branch Recommendations</h3>
+                    <p>Discover which Navy branches best match your strengths and skills.</p>
+                </div>
+
+                <div class="card feature">
+                    <div class="icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 6L9 17l-5-5"/>
+                        </svg>
+                    </div>
+                    <h3>Strengths Analysis</h3>
+                    <p>Know exactly where your profile is strong and competitive.</p>
+                </div>
+
+                <div class="card feature">
+                    <div class="icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>
+                        </svg>
+                    </div>
+                    <h3>Weakness Insights</h3>
+                    <p>Identify weak areas before they cost you a selection chance.</p>
+                </div>
+
+                <div class="card feature">
+                    <div class="icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </div>
+                    <h3>Improvement Tips</h3>
+                    <p>Receive practical suggestions to improve your eligibility over time.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PREDICTOR INTRODUCTION ===== -->
+    <section class="section section-gray">
+        <div class="container">
+            <div class="split">
+                <div>
+                    <span class="eyebrow">The Eligibility Predictor</span>
+                    <h2>How the predictor works</h2>
+                    <p>The predictor uses a trained machine learning model to study your age,
+                       physical fitness, education, medical status and skills, then estimates
+                       your eligibility for Pakistan Navy recruitment.</p>
+                    <ul class="check-list">
+                        <li>Fill a simple candidate form with your details.</li>
+                        <li>The model analyses your complete profile.</li>
+                        <li>Receive a full report in seconds.</li>
+                        <li>Save and review your prediction history any time.</li>
+                    </ul>
+                </div>
+                <div class="highlight-box">
+                    <h3>For Guidance Only</h3>
+                    <p>This portal gives an estimated result to help candidates prepare.
+                       It is an academic tool and does not replace the official Pakistan
+                       Navy selection process.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CALL TO ACTION ===== -->
+    <section class="cta-band">
+        <div class="container">
+            <h2>Ready to check your eligibility?</h2>
+            <p>Create a free account and get your detailed candidate report today.</p>
+            <a href="{{ url_for('register') }}" class="btn btn-primary">Create Account</a>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="foot-grid">
+                <div>
+                    <div class="brand">
+                        <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Logo" style="height:40px;">
+                        <span class="brand-text">PAK NAVY<small>RECRUITMENT PORTAL</small></span>
+                    </div>
+                    <p style="font-size:14px;max-width:320px;">An academic project that predicts
+                       Pakistan Navy recruitment eligibility using machine learning.</p>
+                </div>
+                <div>
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
+                        <li><a href="{{ url_for('about') }}">About</a></li>
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        <li><a href="{{ url_for('register') }}">Register</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>Pakistan Navy</li>
+                        <li>Recruitment Cell</li>
+                        <li>info@example.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copy">© 2025 Pakistan Navy Eligibility Predictor — Academic Project. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

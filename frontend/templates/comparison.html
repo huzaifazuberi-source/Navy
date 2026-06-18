@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Comparison — Pakistan Navy Eligibility Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('dashboard') }}" class="brand">
+                <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Pakistan Navy Logo">
+                <span class="brand-text">PAK NAVY<small>RECRUITMENT PORTAL</small></span>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('candidate_form') }}">New Prediction</a></li>
+                <li><a href="{{ url_for('comparison') }}" class="active">Algorithms</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== PAGE HEADER ===== -->
+    <div class="page-head">
+        <div class="container">
+            <h1>Algorithm Comparison</h1>
+            <p>How the five machine learning models perform on the recruitment dataset.</p>
+        </div>
+    </div>
+
+    <div class="container" style="padding: 34px 0;">
+
+    {% if not data %}
+        <div class="card">
+            <div class="empty">
+                Results file not found. Please run <strong>model_training.ipynb</strong>
+                to generate <strong>model_results.json</strong>.
+            </div>
+        </div>
+    {% else %}
+
+        <!-- ===== RECOMMENDED ALGORITHM (the winner) ===== -->
+        {% set best = data.models[0] %}
+        <div class="welcome" style="background: linear-gradient(120deg, #0A1F44, #1E8E5A);">
+            <span class="badge" style="background:rgba(255,255,255,0.2);color:#fff;">Most Suitable Algorithm</span>
+            <h2 style="margin-top:10px;">{{ best.name }}</h2>
+            <p>{{ best.description }} It gave the highest cross-validation accuracy, so it was
+               chosen as the final model used for predictions.</p>
+            <div class="grid grid-4 mt-24">
+                <div><div class="stat-number" style="color:#fff;">{{ best.accuracy }}%</div><div class="stat-label" style="color:#cdd6e6;">Accuracy</div></div>
+                <div><div class="stat-number" style="color:#fff;">{{ best.precision }}%</div><div class="stat-label" style="color:#cdd6e6;">Precision</div></div>
+                <div><div class="stat-number" style="color:#fff;">{{ best.recall }}%</div><div class="stat-label" style="color:#cdd6e6;">Recall</div></div>
+                <div><div class="stat-number" style="color:#fff;">{{ best.f1 }}%</div><div class="stat-label" style="color:#cdd6e6;">F1 Score</div></div>
+            </div>
+        </div>
+
+        <!-- ===== COMPARISON TABLE (ranked) ===== -->
+        <div class="card mb-24">
+            <h3 class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+                Results Table ({{ data.test_size }} test candidates)
+            </h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Algorithm</th>
+                            <th>CV Accuracy</th>
+                            <th>Accuracy</th>
+                            <th>Precision</th>
+                            <th>Recall</th>
+                            <th>F1 Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for m in data.models %}
+                        <tr {% if loop.first %}style="background:#e6f5ee;"{% endif %}>
+                            <td>
+                                {% if loop.first %}
+                                    <span class="badge badge-success">#1 Best</span>
+                                {% else %}
+                                    {{ loop.index }}
+                                {% endif %}
+                            </td>
+                            <td style="font-weight:600;">{{ m.name }}</td>
+                            <td>{{ m.cv_accuracy }}%</td>
+                            <td>{{ m.accuracy }}%</td>
+                            <td>{{ m.precision }}%</td>
+                            <td>{{ m.recall }}%</td>
+                            <td>{{ m.f1 }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ===== PER-MODEL METRIC BARS ===== -->
+        <div class="section-head" style="margin-bottom:24px;">
+            <h2 style="font-size:26px;">Detailed Comparison</h2>
+            <p>Accuracy, precision, recall and F1 score for each algorithm.</p>
+        </div>
+
+        <div class="grid grid-2">
+            {% for m in data.models %}
+            <div class="card">
+                <h3 class="card-title">
+                    {% if loop.first %}
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+                    {% else %}
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>
+                    {% endif %}
+                    {{ m.name }}
+                    {% if loop.first %}<span class="badge badge-success" style="margin-left:auto;">Best</span>{% endif %}
+                </h3>
+                <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">{{ m.description }}</p>
+
+                <div class="progress-item">
+                    <div class="progress-top"><span class="label">Accuracy</span><span class="value">{{ m.accuracy }}%</span></div>
+                    <div class="progress-track"><div class="progress-fill green" style="width: {{ m.accuracy }}%;"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-top"><span class="label">Precision</span><span class="value">{{ m.precision }}%</span></div>
+                    <div class="progress-track"><div class="progress-fill" style="width: {{ m.precision }}%;"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-top"><span class="label">Recall</span><span class="value">{{ m.recall }}%</span></div>
+                    <div class="progress-track"><div class="progress-fill" style="width: {{ m.recall }}%;"></div></div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-top"><span class="label">F1 Score</span><span class="value">{{ m.f1 }}%</span></div>
+                    <div class="progress-track"><div class="progress-fill" style="width: {{ m.f1 }}%;"></div></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- ===== METRIC MEANINGS (helpful for viva) ===== -->
+        <div class="card mt-24">
+            <h3 class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+                What the metrics mean
+            </h3>
+            <ul class="check-list">
+                <li><strong>Accuracy</strong> — how many predictions were correct overall.</li>
+                <li><strong>Precision</strong> — of those predicted Eligible, how many truly were.</li>
+                <li><strong>Recall</strong> — of all truly eligible candidates, how many were found.</li>
+                <li><strong>F1 Score</strong> — a balance between precision and recall.</li>
+                <li><strong>CV Accuracy</strong> — average accuracy across 5 cross-validation folds (used to pick the best model).</li>
+            </ul>
+        </div>
+
+    {% endif %}
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

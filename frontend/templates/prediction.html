@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result — Pakistan Navy Eligibility Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('dashboard') }}" class="brand">
+                <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Pakistan Navy Logo">
+                <span class="brand-text">PAK NAVY<small>RECRUITMENT PORTAL</small></span>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('candidate_form') }}">New Prediction</a></li>
+                <li><a href="{{ url_for('comparison') }}">Algorithms</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== PAGE HEADER ===== -->
+    <div class="page-head">
+        <div class="container">
+            <h1>Candidate Eligibility Report</h1>
+            <p>Detailed analysis generated from your profile.</p>
+        </div>
+    </div>
+
+    <div class="container" style="padding: 34px 0;">
+
+        <!-- ===== STATUS BANNER (filled by JS) ===== -->
+        <div id="statusBanner" class="status-banner">
+            <h2 id="statusText">—</h2>
+            <p id="statusSub">Your overall recruitment eligibility status</p>
+        </div>
+
+        <!-- ===== PERCENTAGE PROGRESS BARS ===== -->
+        <div class="grid grid-2 mb-24">
+            <div class="card">
+                <h3 class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+                    Eligibility Percentage
+                </h3>
+                <div class="progress-item">
+                    <div class="progress-top">
+                        <span class="label">Chance of being eligible</span>
+                        <span class="value" id="eligValue">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill green" id="eligBar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+                    Confidence Percentage
+                </h3>
+                <div class="progress-item">
+                    <div class="progress-top">
+                        <span class="label">Model confidence</span>
+                        <span class="value" id="confValue">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="confBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== RECOMMENDED BRANCHES ===== -->
+        <div class="card mb-24">
+            <h3 class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/></svg>
+                Recommended Branches
+            </h3>
+            <div id="branchTags"></div>
+        </div>
+
+        <!-- ===== STRENGTHS / WEAKNESSES / SUGGESTIONS ===== -->
+        <div class="grid grid-3 mb-24">
+            <div class="card">
+                <h3 class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                    Strengths
+                </h3>
+                <ul class="report-list list-strength" id="strengthsList"></ul>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+                    Weaknesses
+                </h3>
+                <ul class="report-list list-weakness" id="weaknessList"></ul>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                    Suggestions
+                </h3>
+                <ul class="report-list list-suggestion" id="suggestionList"></ul>
+            </div>
+        </div>
+
+        <!-- ===== DETAILED CANDIDATE REPORT ===== -->
+        <div class="card">
+            <h3 class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+                Detailed Candidate Report
+            </h3>
+            <div class="table-wrap">
+                <table id="reportTable">
+                    <tbody><!-- filled by JS --></tbody>
+                </table>
+            </div>
+            <a href="{{ url_for('candidate_form') }}" class="btn btn-navy mt-24">Make Another Prediction</a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary mt-24">Back to Dashboard</a>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+/* ============================================================
+   style.css  -  Pakistan Navy Eligibility Predictor
+   Theme: Navy Blue + White + Light Gray (with a gold accent)
+   Plain CSS only. No frameworks. Beginner-friendly.
+   ============================================================ */
+
+/* ---- Google Fonts: Saira (headings) + Inter (body) ---- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Saira:wght@500;600;700&display=swap');
+
+/* ---- 1. Color & spacing variables (change once, used everywhere) ---- */
+:root {
+    --navy:      #0A1F44;   /* main dark navy */
+    --navy-2:    #13315C;   /* slightly lighter navy */
+    --navy-3:    #1E4D8C;   /* accent blue */
+    --gold:      #C9A24B;   /* gold accent (naval insignia) */
+    --white:     #FFFFFF;
+    --gray:      #F4F6FA;   /* light gray background */
+    --gray-2:    #E4E9F2;   /* light borders */
+    --text:      #1B2A41;   /* main text color */
+    --muted:     #5B6B85;   /* soft gray text */
+    --success:   #1E8E5A;   /* eligible (green) */
+    --danger:    #C0392B;   /* not eligible (red) */
+    --radius:    14px;
+    --shadow:    0 8px 24px rgba(10, 31, 68, 0.10);
+}
+
+/* ---- 2. Base reset ---- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    color: var(--text);
+    background: var(--gray);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Saira', Arial, sans-serif;
+    color: var(--navy);
+    line-height: 1.2;
+}
+
+a { text-decoration: none; color: inherit; }
+
+.container {
+    width: 90%;
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+.section { padding: 70px 0; }
+.section-white { background: var(--white); }
+.section-gray  { background: var(--gray); }
+
+.text-center { text-align: center; }
+
+/* eyebrow label above headings */
+.eyebrow {
+    display: inline-block;
+    font-family: 'Saira', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+
+/* ---- 3. Buttons ---- */
+.btn {
+    display: inline-block;
+    padding: 13px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform .15s ease, background .2s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+
+.btn-primary { background: var(--gold); color: var(--navy); }
+.btn-primary:hover { background: #d8b463; }
+
+.btn-outline { background: transparent; color: var(--white); border-color: var(--white); }
+.btn-outline:hover { background: var(--white); color: var(--navy); }
+
+.btn-navy { background: var(--navy); color: var(--white); }
+.btn-navy:hover { background: var(--navy-2); }
+
+.btn-block { width: 100%; text-align: center; }
+
+/* ---- 4. Navbar ---- */
+.navbar {
+    background: var(--navy);
+    color: var(--white);
+    padding: 14px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--gold);
+}
+.navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand img { height: 46px; width: auto; }
+.brand .brand-text { font-family: 'Saira', sans-serif; font-weight: 700; }
+.brand .brand-text small { display: block; font-size: 11px; color: var(--gold); letter-spacing: 1px; }
+
+.nav-links { display: flex; align-items: center; gap: 8px; list-style: none; }
+.nav-links a {
+    color: var(--white);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: background .2s ease;
+}
+.nav-links a:hover { background: var(--navy-2); }
+.nav-links a.active { background: var(--navy-3); }
+
+/* mobile menu toggle (hidden on desktop) */
+.menu-toggle { display: none; font-size: 26px; background: none; border: none; color: var(--white); cursor: pointer; }
+
+/* ---- 5. Hero ---- */
+.hero {
+    background: linear-gradient(rgba(10,31,68,0.86), rgba(10,31,68,0.92)),
+                url('https://images.unsplash.com/photo-1542397284385-6010376c5337?auto=format&fit=crop&w=1600&q=60');
+    background-size: cover;
+    background-position: center;
+    color: var(--white);
+    text-align: center;
+    padding: 110px 0;
+}
+.hero h1 { color: var(--white); font-size: 48px; margin-bottom: 16px; }
+.hero h1 span { color: var(--gold); }
+.hero p { font-size: 18px; max-width: 680px; margin: 0 auto 28px; color: #d7deec; }
+.hero .btn { margin: 6px; }
+
+/* ---- 6. Cards ---- */
+.card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 26px;
+    border: 1px solid var(--gray-2);
+}
+
+.grid {
+    display: grid;
+    gap: 24px;
+}
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* feature card with icon */
+.feature .icon {
+    width: 56px; height: 56px;
+    background: var(--navy);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+}
+.feature .icon svg { width: 28px; height: 28px; stroke: var(--gold); }
+.feature h3 { font-size: 20px; margin-bottom: 8px; }
+.feature p { color: var(--muted); font-size: 15px; }
+
+.section-head { text-align: center; max-width: 640px; margin: 0 auto 46px; }
+.section-head h2 { font-size: 34px; }
+.section-head p { color: var(--muted); margin-top: 10px; }
+
+/* intro split (text + highlight box) */
+.split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; }
+.split h2 { font-size: 32px; margin-bottom: 14px; }
+.split p { color: var(--muted); margin-bottom: 14px; }
+.check-list { list-style: none; }
+.check-list li { padding: 8px 0 8px 30px; position: relative; }
+.check-list li::before {
+    content: "\2713"; /* check mark */
+    position: absolute; left: 0; top: 8px;
+    color: var(--gold); font-weight: 700;
+}
+.highlight-box {
+    background: var(--navy);
+    color: var(--white);
+    border-radius: var(--radius);
+    padding: 34px;
+    border-top: 4px solid var(--gold);
+}
+.highlight-box h3 { color: var(--white); font-size: 22px; margin-bottom: 10px; }
+.highlight-box p { color: #cdd6e6; }
+
+/* ---- 7. CTA band ---- */
+.cta-band {
+    background: var(--navy-2);
+    color: var(--white);
+    text-align: center;
+    padding: 64px 0;
+    border-top: 3px solid var(--gold);
+}
+.cta-band h2 { color: var(--white); font-size: 30px; margin-bottom: 10px; }
+.cta-band p { color: #cdd6e6; margin-bottom: 24px; }
+
+/* ---- 8. Footer ---- */
+.footer {
+    background: var(--navy);
+    color: #c4cee0;
+    padding: 40px 0 20px;
+    border-top: 3px solid var(--gold);
+}
+.footer .brand { margin-bottom: 14px; }
+.footer .brand .brand-text { color: var(--white); }
+.footer .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 30px; }
+.footer h4 { color: var(--white); margin-bottom: 12px; font-size: 16px; }
+.footer ul { list-style: none; }
+.footer ul li { margin-bottom: 8px; font-size: 14px; }
+.footer ul li a:hover { color: var(--gold); }
+.footer .copy {
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    margin-top: 26px; padding-top: 16px;
+    font-size: 13px; color: #95a3bd;
+}
+
+/* ---- 9. Auth pages (login / register) ---- */
+.auth-wrap {
+    min-height: calc(100vh - 80px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-3));
+}
+.auth-card {
+    background: var(--white);
+    width: 100%; max-width: 420px;
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.25);
+    padding: 36px;
+    border-top: 5px solid var(--gold);
+}
+.auth-card .auth-logo { text-align: center; margin-bottom: 14px; }
+.auth-card .auth-logo img { height: 64px; }
+.auth-card h2 { text-align: center; font-size: 24px; }
+.auth-card .sub { text-align: center; color: var(--muted); margin-bottom: 22px; font-size: 14px; }
+.auth-card .switch { text-align: center; margin-top: 18px; font-size: 14px; color: var(--muted); }
+.auth-card .switch a { color: var(--navy-3); font-weight: 600; }
+
+/* ---- 10. Forms ---- */
+.form-group { margin-bottom: 16px; }
+.form-group label {
+    display: block; font-size: 14px; font-weight: 600;
+    margin-bottom: 6px; color: var(--navy);
+}
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1.5px solid var(--gray-2);
+    border-radius: 9px;
+    font-size: 15px;
+    font-family: inherit;
+    background: var(--white);
+    color: var(--text);
+}
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--navy-3);
+    box-shadow: 0 0 0 3px rgba(30,77,140,0.12);
+}
+.form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.form-section-title {
+    font-family: 'Saira', sans-serif;
+    color: var(--navy-3);
+    font-size: 16px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin: 22px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--gray-2);
+}
+
+/* page header strip (inner pages) */
+.page-head {
+    background: var(--navy);
+    color: var(--white);
+    padding: 38px 0;
+    border-bottom: 3px solid var(--gold);
+}
+.page-head h1 { color: var(--white); font-size: 30px; }
+.page-head p { color: #c4cee0; margin-top: 4px; }
+
+/* flash messages */
+.flash {
+    background: #fff7e6;
+    border: 1px solid var(--gold);
+    color: #7a5b12;
+    padding: 12px 16px;
+    border-radius: 9px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+/* ---- 11. Dashboard ---- */
+.welcome {
+    background: linear-gradient(120deg, var(--navy), var(--navy-3));
+    color: var(--white);
+    border-radius: var(--radius);
+    padding: 30px;
+    margin-bottom: 28px;
+    border-left: 5px solid var(--gold);
+}
+.welcome h2 { color: var(--white); font-size: 26px; }
+.welcome p { color: #cdd6e6; }
+
+.stat-card { text-align: center; }
+.stat-card .stat-icon {
+    width: 50px; height: 50px; margin: 0 auto 12px;
+    background: var(--gray); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+}
+.stat-card .stat-icon svg { width: 26px; height: 26px; stroke: var(--navy-3); }
+.stat-card .stat-number { font-family: 'Saira', sans-serif; font-size: 34px; font-weight: 700; color: var(--navy); }
+.stat-card .stat-label { color: var(--muted); font-size: 14px; }
+
+/* history table */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+thead th {
+    background: var(--navy); color: var(--white);
+    text-align: left; padding: 12px 14px; font-family: 'Saira', sans-serif; font-weight: 600;
+}
+tbody td { padding: 12px 14px; border-bottom: 1px solid var(--gray-2); }
+tbody tr:hover { background: var(--gray); }
+
+.empty { text-align: center; padding: 30px; color: var(--muted); }
+
+/* ---- 12. Status indicators / badges ---- */
+.badge {
+    display: inline-block; padding: 5px 12px; border-radius: 20px;
+    font-size: 13px; font-weight: 600;
+}
+.badge-success { background: #e6f5ee; color: var(--success); }
+.badge-danger  { background: #fdeceb; color: var(--danger); }
+
+.status-banner {
+    border-radius: var(--radius); padding: 24px; text-align: center;
+    color: var(--white); margin-bottom: 24px;
+}
+.status-banner h2 { color: var(--white); font-size: 30px; }
+.status-eligible { background: linear-gradient(120deg, #1E8E5A, #25a567); }
+.status-not-eligible { background: linear-gradient(120deg, #C0392B, #d04638); }
+
+/* ---- 13. Progress bars ---- */
+.progress-item { margin-bottom: 16px; }
+.progress-top { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+.progress-top .label { font-weight: 600; color: var(--navy); }
+.progress-top .value { color: var(--muted); }
+.progress-track {
+    background: var(--gray-2);
+    border-radius: 20px;
+    height: 14px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    border-radius: 20px;
+    background: linear-gradient(90deg, var(--navy-3), var(--gold));
+    width: 0;                /* JS animates this */
+    transition: width 1s ease;
+}
+.progress-fill.green { background: linear-gradient(90deg, #1E8E5A, #4cd28a); }
+
+/* lists for strengths / weaknesses / suggestions */
+.report-list { list-style: none; }
+.report-list li {
+    padding: 10px 12px 10px 38px;
+    position: relative;
+    border-bottom: 1px solid var(--gray-2);
+    font-size: 15px;
+}
+.report-list li:last-child { border-bottom: none; }
+.report-list li::before {
+    position: absolute; left: 12px; top: 10px; font-weight: 700;
+}
+.list-strength li::before { content: "\2713"; color: var(--success); }
+.list-weakness li::before { content: "\21";   color: var(--danger); }
+.list-suggestion li::before { content: "\2192"; color: var(--navy-3); }
+
+.tag {
+    display: inline-block; background: var(--navy);
+    color: var(--white); padding: 7px 14px;
+    border-radius: 8px; margin: 5px 5px 0 0; font-size: 14px;
+}
+.card-title {
+    font-family: 'Saira', sans-serif; font-size: 18px;
+    color: var(--navy); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+}
+.card-title svg { width: 20px; height: 20px; stroke: var(--gold); }
+
+.mt-24 { margin-top: 24px; }
+.mb-24 { margin-bottom: 24px; }
+
+/* ---- 14. Responsive (mobile friendly) ---- */
+@media (max-width: 860px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: 1fr; }
+    .split  { grid-template-columns: 1fr; }
+    .footer .foot-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 34px; }
+
+    .menu-toggle { display: block; }
+    .nav-links {
+        display: none;
+        position: absolute; top: 70px; left: 0; right: 0;
+        background: var(--navy);
+        flex-direction: column; align-items: stretch;
+        padding: 10px 20px 18px;
+        border-bottom: 3px solid var(--gold);
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 12px; }
+}
+
+@media (max-width: 560px) {
+    .grid-4, .grid-2 { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .hero { padding: 70px 0; }
+}

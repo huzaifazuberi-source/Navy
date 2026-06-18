@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Form — Pakistan Navy Eligibility Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('dashboard') }}" class="brand">
+                <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Pakistan Navy Logo">
+                <span class="brand-text">PAK NAVY<small>RECRUITMENT PORTAL</small></span>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('candidate_form') }}" class="active">New Prediction</a></li>
+                <li><a href="{{ url_for('comparison') }}">Algorithms</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== PAGE HEADER ===== -->
+    <div class="page-head">
+        <div class="container">
+            <h1>Candidate Eligibility Form</h1>
+            <p>Fill in the details below to generate your eligibility report.</p>
+        </div>
+    </div>
+
+    <div class="container" style="padding: 34px 0;">
+        <div class="card">
+
+            <!-- Where error messages appear -->
+            <div id="formError" class="flash" style="display:none;"></div>
+
+            <!-- The form. We do NOT use a normal submit; JavaScript handles it. -->
+            <form id="candidateForm">
+
+                <!-- ---- Personal ---- -->
+                <div class="form-section-title">Personal Information</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="candidate_id">Candidate ID (optional)</label>
+                        <input type="text" id="candidate_id" placeholder="e.g. PN-12345">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" min="15" max="40" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" required>
+                            <option value="">Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="marital_status">Marital Status</label>
+                        <select id="marital_status" required>
+                            <option value="">Select</option>
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <select id="city" required>
+                        <option value="">Select</option>
+                        <option>Karachi</option>
+                        <option>Lahore</option>
+                        <option>Islamabad</option>
+                        <option>Rawalpindi</option>
+                        <option>Faisalabad</option>
+                        <option>Multan</option>
+                        <option>Peshawar</option>
+                        <option>Quetta</option>
+                        <option>Hyderabad</option>
+                        <option>Gujranwala</option>
+                    </select>
+                </div>
+
+                <!-- ---- Physical & Medical ---- -->
+                <div class="form-section-title">Physical &amp; Medical</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="height_cm">Height (cm)</label>
+                        <input type="number" id="height_cm" step="0.1" min="100" max="230" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight_kg">Weight (kg)</label>
+                        <input type="number" id="weight_kg" step="0.1" min="30" max="200" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="physical_fitness_score">Physical Fitness Score (0–100)</label>
+                        <input type="number" id="physical_fitness_score" min="0" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="medical_status">Medical Status</label>
+                        <select id="medical_status" required>
+                            <option value="">Select</option>
+                            <option value="Fit">Fit</option>
+                            <option value="Unfit">Unfit</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ---- Education ---- -->
+                <div class="form-section-title">Education</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="matric_percentage">Matric Marks (%)</label>
+                        <input type="number" id="matric_percentage" step="0.01" min="0" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inter_percentage">Intermediate Marks (%)</label>
+                        <input type="number" id="inter_percentage" step="0.01" min="0" max="100" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="cgpa">CGPA (0–4)</label>
+                    <input type="number" id="cgpa" step="0.01" min="0" max="4" required>
+                </div>
+
+                <!-- ---- Skills ---- -->
+                <div class="form-section-title">Skills</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="computer_skills">Computer Skills</label>
+                        <select id="computer_skills" required>
+                            <option value="">Select</option>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="leadership_score">Leadership Score (0–100)</label>
+                        <input type="number" id="leadership_score" min="0" max="100" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="communication_score">Communication Score (0–100)</label>
+                    <input type="number" id="communication_score" min="0" max="100" required>
+                </div>
+
+                <!-- ---- Preference ---- -->
+                <div class="form-section-title">Branch Preference</div>
+                <div class="form-group">
+                    <label for="branch_preference">Preferred Branch</label>
+                    <select id="branch_preference" required>
+                        <option value="">Select</option>
+                        <option value="Combat">Combat</option>
+                        <option value="Naval Aviation">Naval Aviation</option>
+                        <option value="Marine Engineering">Marine Engineering</option>
+                        <option value="IT &amp; Cyber">IT &amp; Cyber</option>
+                        <option value="Logistics">Logistics</option>
+                        <option value="Medical Corps">Medical Corps</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-navy btn-block mt-24" id="submitBtn">
+                    Predict Eligibility
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

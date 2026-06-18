@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — Pakistan Navy Eligibility Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- ===== NAVBAR (logged in) ===== -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('dashboard') }}" class="brand">
+                <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="Pakistan Navy Logo">
+                <span class="brand-text">PAK NAVY<small>RECRUITMENT PORTAL</small></span>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">&#9776;</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('dashboard') }}" class="active">Dashboard</a></li>
+                <li><a href="{{ url_for('candidate_form') }}">New Prediction</a></li>
+                <li><a href="{{ url_for('comparison') }}">Algorithms</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+                <li><a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container" style="padding: 34px 0;">
+
+        <!-- ===== WELCOME SECTION ===== -->
+        <div class="welcome">
+            <h2>Welcome, {{ user_name }}</h2>
+            <p>Here is a summary of your eligibility predictions.</p>
+            <a href="{{ url_for('candidate_form') }}" class="btn btn-primary mt-24">+ New Prediction</a>
+        </div>
+
+        <!-- ===== STATISTICS CARDS ===== -->
+        <div class="grid grid-4 mb-24">
+
+            <div class="card stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/>
+                    </svg>
+                </div>
+                <div class="stat-number">{{ stats.total }}</div>
+                <div class="stat-label">Total Predictions</div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 6L9 17l-5-5"/>
+                    </svg>
+                </div>
+                <div class="stat-number">{{ stats.eligible }}</div>
+                <div class="stat-label">Eligible Results</div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </div>
+                <div class="stat-number">{{ stats.not_eligible }}</div>
+                <div class="stat-label">Not Eligible Results</div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+                    </svg>
+                </div>
+                <div class="stat-number">{{ stats.avg_eligibility }}%</div>
+                <div class="stat-label">Avg. Eligibility</div>
+            </div>
+
+        </div>
+
+        <!-- ===== PREDICTION HISTORY ===== -->
+        <div class="card">
+            <h3 class="card-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+                </svg>
+                Prediction History
+            </h3>
+
+            {% if records and records|length > 0 %}
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Candidate ID</th>
+                            <th>Branch Preference</th>
+                            <th>Status</th>
+                            <th>Eligibility %</th>
+                            <th>Confidence %</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in records %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ r.candidate_id or '—' }}</td>
+                            <td>{{ r.branch_preference }}</td>
+                            <td>
+                                {% if r.predicted_status == 'Eligible' %}
+                                    <span class="badge badge-success">Eligible</span>
+                                {% else %}
+                                    <span class="badge badge-danger">Not Eligible</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ r.eligibility_percentage }}%</td>
+                            <td>{{ r.confidence_percentage }}%</td>
+                            <td>{{ r.created_at.strftime('%d %b %Y') if r.created_at else '—' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <div class="empty">
+                    No predictions yet. Click <strong>New Prediction</strong> to create your first report.
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
