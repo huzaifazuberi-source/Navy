@@ -1,27 +1,49 @@
 # ============================================================
 # database.py
 # Simple functions to talk to the PostgreSQL (Supabase) database.
-# We use psycopg2, which is a beginner-friendly PostgreSQL library.
+# Safe fallback wrapper included for seamless Python 3.13 deployment.
 # ------------------------------------------------------------
-# Install once:  pip install psycopg2-binary
+# Install once:  pip install psycopg[binary]
 # ============================================================
 
-import psycopg2
-import psycopg2.extras  # lets us get rows as dictionaries (easy to read)
+try:
+    import psycopg2
+    import psycopg2.extras
+except ImportError:
+    # Modern compatibility layer for Python 3.13 cloud runtime
+    import psycopg as psycopg2
+    import psycopg.rows as psycopg_extras
+    
+    # Patch the RealDictCursor behavior to keep old code working as-is
+    class RealDictCursor:
+        def __init__(self, *args, **kwargs):
+            pass
+    psycopg2.extras = RealDictCursor
+    psycopg2.extras.RealDictCursor = psycopg_extras.dict_row
 
 import config
 
 
 def get_connection():
     """Open and return a new connection to the database."""
-    connection = psycopg2.connect(
-        host=config.DB_HOST,
-        port=config.DB_PORT,
-        dbname=config.DB_NAME,
-        user=config.DB_USER,
-        password=config.DB_PASSWORD,
-    )
-    return connection
+    # If using modern psycopg v3, cursor_factory handling is managed at cursor creation
+    if hasattr(psycopg2, 'rows'):
+        conn = psycopg2.connect(
+            host=config.DB_HOST,
+            port=int(config.DB_PORT),
+            dbname=config.DB_NAME,
+            user=config.DB_USER,
+            password=config.DB_PASSWORD,
+        )
+    else:
+        conn = psycopg2.connect(
+            host=config.DB_HOST,
+            port=config.DB_PORT,
+            dbname=config.DB_NAME,
+            user=config.DB_USER,
+            password=config.DB_PASSWORD,
+        )
+    return conn
 
 
 # ------------------------------------------------------------
@@ -30,7 +52,11 @@ def get_connection():
 def create_user(full_name, email, hashed_password):
     """Insert a new user. Returns the new user's id."""
     conn = get_connection()
-    cur = conn.cursor()
+    if hasattr(psycopg2, 'rows'):
+        cur = conn.cursor()
+    else:
+        cur = conn.cursor()
+        
     cur.execute(
         """
         INSERT INTO users (full_name, email, password)
@@ -49,7 +75,11 @@ def create_user(full_name, email, hashed_password):
 def get_user_by_email(email):
     """Find one user by email. Returns a dictionary or None."""
     conn = get_connection()
-    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    if hasattr(psycopg2, 'rows'):
+        cur = conn.cursor(row_factory=psycopg2.extras.RealDictCursor)
+    else:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        
     cur.execute("SELECT * FROM users WHERE email = %s", (email,))
     user = cur.fetchone()
     cur.close()
@@ -112,7 +142,11 @@ def save_prediction(user_id, data, result):
 def get_user_predictions(user_id):
     """Return all predictions made by one user (newest first)."""
     conn = get_connection()
-    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    if hasattr(psycopg2, 'rows'):
+        cur = conn.cursor(row_factory=psycopg2.extras.RealDictCursor)
+    else:
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        
     cur.execute(
         """
         SELECT * FROM predictions
